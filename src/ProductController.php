@@ -32,7 +32,7 @@ class ProductController {
             case "PATCH":
                 $data = (array) json_decode(file_get_contents("php://input"), true);
 
-                $errors = $this->getValidationErrors($data);
+                $errors = $this->getValidationErrors($data, false);
                 if (!empty($errors)){
                     http_response_code(422);
                     echo json_encode(["errors" => $errors]);
@@ -88,11 +88,11 @@ class ProductController {
         }
     }
 
-    private function getValidationErrors(array $data) : array
+    private function getValidationErrors(array $data, bool $is_new = true) : array
     {
         $errors = [];
 
-        if (empty($data["name"])) $errors[] = "name is required";
+        if ($is_new && empty($data["name"])) $errors[] = "name is required";
         
         if (array_key_exists("size", $data)){
             if (filter_var($data["size"], FILTER_VALIDATE_INT) === FALSE){
