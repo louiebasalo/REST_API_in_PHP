@@ -52,7 +52,7 @@ class ProductController {
 
             case "DELETE":
                 $row = $this->gateway->delete($id);
-
+                http_response_code(204);
                 echo json_encode([
                     "message" => "Product $id is deleted.",
                     "rows" => $row
