@@ -23,7 +23,7 @@ if($parts[2] != "products"){
 
 $id = $parts[3] ?? null;
 
-$database = new Database("localhost","product_db","root", "");
+$database = new Database("localhost","db_product","root", "");
 $gateway = new ProductGateway($database);
 
 $controller = new ProductController($gateway);

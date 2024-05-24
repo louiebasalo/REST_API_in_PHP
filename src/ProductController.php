@@ -32,7 +32,7 @@ class ProductController {
             case "PATCH":
                 $data = (array) json_decode(file_get_contents("php://input"), true);
 
-                $errors = $this->getValidationErrors($data, false);
+                $errors = $this->getValidationErrors($data);
                 if (!empty($errors)){
                     http_response_code(422);
                     echo json_encode(["errors" => $errors]);
@@ -54,7 +54,7 @@ class ProductController {
                 $row = $this->gateway->delete($id);
                 http_response_code(204);
                 echo json_encode([
-                    "message" => "Product $id is deleted.",
+                    "message" => "Product {$id} is deleted.",
                     "rows" => $row
                 ]);
 
@@ -75,7 +75,6 @@ class ProductController {
 
             case "POST":
                 $data = (array) json_decode(file_get_contents("php://input"), true);
-
                 $errors = $this->getValidationErrors($data);
                 if (!empty($errors)){
                     http_response_code(422);
@@ -101,11 +100,11 @@ class ProductController {
         }
     }
 
-    private function getValidationErrors(array $data, bool $is_new = true) : array
+    private function getValidationErrors(array $data) : array
     {
         $errors = [];
 
-        if ($is_new && empty($data["name"])) $errors[] = "name is required";
+        if (empty($data["name"])) $errors[] = "name is required";
         
         if (array_key_exists("size", $data)){
             if (filter_var($data["size"], FILTER_VALIDATE_INT) === FALSE){
